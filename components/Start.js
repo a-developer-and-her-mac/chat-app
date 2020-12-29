@@ -8,15 +8,14 @@ export default class Start extends React.Component {
     super(props);
     this.state = {
       name: '',
-      color: '#FFFFF'
+      color: '#FFFFF',
+      pressed: false
     };
   }
   render() {
     return (
       <ImageBackground source={image} style={styles.image}>
-        <View>
-          <Text style={styles.appTitle}>Chatico</Text>
-        </View>
+          <Text style={styles.appTitle}>Chatter</Text>
       <View style={styles.container}>
          <TextInput
           style={styles.nameInput}
@@ -27,16 +26,16 @@ export default class Start extends React.Component {
       <Text style={styles.backgroundColorText}>Choose Background Color:</Text>
       <View style={styles.colorInput}>
       <TouchableOpacity
-        onPress={() => this.setState({color: '#090C08'})}
+        onPress={() => {this.setState({color: '#090C08', pressed: true})}}
         style={[styles.colorButton, styles.color1]} />
       <TouchableOpacity
-        onPress={() => this.setState({color: '#474056'})}
+        onPress={() => {this.setState({color: '#474056', pressed: true})}}
         style={[styles.colorButton, styles.color2]} />
       <TouchableOpacity
-        onPress={() => this.setState({color: '#8A95A5'})}
+        onPress={() => {this.setState({color: '#8A95A5', pressed: true})}}
         style={[styles.colorButton, styles.color3]} />
       <TouchableOpacity
-        onPress={() => this.setState({color: '#B9C6AE'})}
+        onPress={() => {this.setState({color: '#B9C6AE', pressed: true})}}
         style={[styles.colorButton, styles.color4]} />
         </View>
       <TouchableOpacity
@@ -54,6 +53,7 @@ export default class Start extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#FFFFFF',
     height: '44%',
     width: '88%',
@@ -63,11 +63,12 @@ const styles = StyleSheet.create({
     marginBottom: 22
   },
   appTitle: {
+    flex: 1,
     textAlign: 'center',
     fontSize: 45,
     fontWeight: '600',
     color: '#FFFFFF',
-    marginTop: '20%',
+    marginTop: '20%'
   },
   image: {
     flex: 1
@@ -76,18 +77,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '300',
     color: '#757083',
-    opacity: 0.5
+    opacity: 0.5,
+    borderColor: '#757083',
+    borderWidth: 2,
+    marginBottom: 25,
+    marginTop: 25,
+    marginLeft: 20,
+    width: '88%',
+    height: '20%'
   },
   submitButton: {
     backgroundColor: '#757083',
     alignItems: 'center',
     justifyContent: 'center',
     width: '88%',
-    height: '18%',
+    height: '20%',
     marginBottom: '5%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: '45%'
+    marginLeft: '5%'
   },
   submitButtonText: {
     color: '#FFFFFF',
@@ -98,12 +104,18 @@ const styles = StyleSheet.create({
     fontSize:16,
     fontWeight: '300',
     color: '#757083',
-    opacity: 1
+    opacity: 1,
+    marginLeft: 15
   },
   colorButton: {
-    height: 30,
-    width: 30,
-    borderRadius: 30/2,
+    height: 34,
+    width: 34,
+    borderRadius: 34/2,
+    margin: 5
+  },
+  colorButtonStyleOnPressed: {
+    borderColor: '#757083',
+    borderWidth: 2
   },
   color1: {
     backgroundColor: '#090C08'
@@ -118,6 +130,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#B9C6AE'
   },
   colorInput: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    flex: 4,
+    alignItems: 'flex-start',
+    margin: 15
   }
 });
