@@ -1,6 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, ImageBackground, TouchableOpacity, Button } from 'react-native';
+import { 
+  StyleSheet, Text, View,
+  TextInput, ImageBackground,
+  TouchableOpacity, Button,
+  KeyboardAvoidingView,
+  Platform
+        } from 'react-native';
 
+//import the background image for the start screen
 const image = source = require('../assets/BackgroundImage.png');
 
 export default class Start extends React.Component {
@@ -38,6 +45,10 @@ export default class Start extends React.Component {
         onPress={() => {this.setState({color: '#B9C6AE', pressed: true})}}
         style={[styles.colorButton, styles.color4]} />
         </View>
+        {/* The Button component cannot be styled properly,
+         so instead we can use the TouchableOpacity component
+         and make it function like a button.
+         */}
       <TouchableOpacity
           style={styles.submitButton}
           onPress={() => this.props.navigation.navigate
@@ -93,7 +104,7 @@ const styles = StyleSheet.create({
     width: '88%',
     height: '20%',
     marginBottom: '5%',
-    marginLeft: '5%'
+    marginLeft: '6%'
   },
   submitButtonText: {
     color: '#FFFFFF',
