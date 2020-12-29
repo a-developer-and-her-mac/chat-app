@@ -19,6 +19,7 @@ export default function App() {
        <Stack.Screen
        name='Start'
        component={Start}
+       options={{ headerShown: false }}
        />
        <Stack.Screen
        name='Chat'
@@ -30,10 +31,4 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });
