@@ -17,6 +17,7 @@ export default class Chat extends React.Component {
       },
       loggedInText: ''
     };
+  if (!firebase.apps.length){
     const firebaseConfig = {
       apiKey: "AIzaSyBYB311y2BiDldzNHL6AGQm7mnTduHiCPg",
       authDomain: "chat-app-75128.firebaseapp.com",
@@ -26,7 +27,6 @@ export default class Chat extends React.Component {
       appId: "1:648001538141:web:f531c861188aa9029b25b4",
       measurementId: "G-BLG5GP44MV"
     };
-  if (!firebase.apps.length){
     firebase.initializeApp(firebaseConfig);
     }
     this.referenceMessages = firebase.firestore().collection('messages');
@@ -49,6 +49,7 @@ componentDidMount() {
     });
   });
   this.referenceMessages = firebase.firestore().collection('messages');
+  this.unsubscribe = this.referenceMessages.onSnapshot(this.onCollectionUpdate)
 }
 
  componentWillUnmount() {
@@ -68,11 +69,12 @@ onSend( messages = [] ) {
 }
 
 addMessage() {
+  const message = this.state.messages[0];
   this.referenceMessages.add({
-    _id: '',
-    text: '',
-    createdAt: new Date(),
-    user: uid
+    _id: message._id,
+    text: message.text,
+    createdAt: message.createdAt,
+    user: message.user
   });
 }
 
@@ -105,12 +107,11 @@ onCollectionUpdate = (querySnapshot) => {
 
     return (
       <View style={{flex: 1, backgroundColor: this.props.route.params.color}}>
+        <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.loggedInText}</Text>
         <GiftedChat
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
-        user={{
-          _id: 1
-        }}
+        user={this.state.user}
         />
         { Platform.OS === 'android' ?
          <KeyboardAvoidingView behavior="height" /> : null
