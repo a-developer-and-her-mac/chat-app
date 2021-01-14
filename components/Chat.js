@@ -169,7 +169,7 @@ renderInputToolbar(props) {
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={this.state.user}
-        renderInputToolbar={this.renderInputToolbar}
+        renderInputToolbar={this.renderInputToolbar.bind(this)}
         />
         { Platform.OS === 'android' ?
          <KeyboardAvoidingView behavior="height" /> : null
