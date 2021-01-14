@@ -51,7 +51,9 @@ componentDidMount() {
             avatar: 'https://placeimg.com/140/140/any'
           },
           loggedInText: `${this.props.route.params.name} has entered the chat`,
+          messages: []
         });
+        this.unsubscribe = this.referenceMessages.onSnapshot(this.onCollectionUpdate)
       });
     } else {
       this.setState({
@@ -62,7 +64,6 @@ componentDidMount() {
   });
   
   this.referenceMessages = firebase.firestore().collection('messages');
-  this.unsubscribe = this.referenceMessages.onSnapshot(this.onCollectionUpdate)
 }
 
  componentWillUnmount() {
@@ -168,6 +169,7 @@ renderInputToolbar(props) {
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={this.state.user}
+        renderInputToolbar={this.renderInputToolbar}
         />
         { Platform.OS === 'android' ?
          <KeyboardAvoidingView behavior="height" /> : null
