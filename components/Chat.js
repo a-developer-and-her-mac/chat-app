@@ -2,7 +2,12 @@ import React from 'react';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
-import NetInfo from "@react-native-community/netinfo";
+import NetInfo from '@react-native-community/netinfo';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+import MapView from 'react-native-maps';
+import CustomActions from './CustomActions';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -18,7 +23,9 @@ export default class Chat extends React.Component {
         avatar: ''
       },
       loggedInText: '',
-      isConnected: false
+      isConnected: false,
+      image: null,
+      location: null
     };
   if (!firebase.apps.length){
     const firebaseConfig = {
@@ -155,6 +162,10 @@ renderInputToolbar(props) {
   }
 }
 
+renderCustomActions = (props) => {
+  return <CustomActions {...props} />;
+}
+
   render() {
     //Sets name variable/screen title to be name from previous screen
     //Not working properly, causes a warning.
@@ -170,6 +181,7 @@ renderInputToolbar(props) {
         onSend={messages => this.onSend(messages)}
         user={this.state.user}
         renderInputToolbar={this.renderInputToolbar.bind(this)}
+        renderActions={this.renderCustomActions}
         />
         { Platform.OS === 'android' ?
          <KeyboardAvoidingView behavior="height" /> : null
