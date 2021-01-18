@@ -98,9 +98,10 @@ addMessage() {
     text: message.text,
     createdAt: message.createdAt,
     user: message.user,
-    image: message.image || '',
+    image: message.image || null,
     location: message.location || null
   });
+  console.log(message);
 }
 
 async getMessages() {
@@ -147,7 +148,7 @@ onCollectionUpdate = (querySnapshot) => {
         name: data.user.name,
         avatar: data.user.avatar
       },
-      image: data.image || '',
+      image: data.image,
       location: data.location
     });
   });

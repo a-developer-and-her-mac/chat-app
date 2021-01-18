@@ -51,8 +51,8 @@ export default class CustomActions extends React.Component {
       if(result){
         this.props.onSend({
           location: {
-            longitude: location.longitude,
-            latitude: location.latitude
+            longitude: location.coords.longitude,
+            latitude: location.coords.latitude
           }
         });
       }
@@ -84,6 +84,7 @@ export default class CustomActions extends React.Component {
       const snapshot = await ref.put(blob);
       blob.close();
       const imageURL = await snapshot.ref.getDownloadURL();
+      console.log(imageURL);
       return imageURL;
   }
 
