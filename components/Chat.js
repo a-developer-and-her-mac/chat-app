@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
-import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
+import { GiftedChat, InputToolbar, renderCustomView } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import * as Permissions from 'expo-permissions';
@@ -96,7 +96,9 @@ addMessage() {
     _id: message._id,
     text: message.text,
     createdAt: message.createdAt,
-    user: message.user
+    user: message.user,
+    image: message.image || '',
+    location: message.location || null
   });
 }
 
@@ -144,6 +146,8 @@ onCollectionUpdate = (querySnapshot) => {
         name: data.user.name,
         avatar: data.user.avatar
       },
+      image: data.image || '',
+      location: data.location
     });
   });
   this.setState({
@@ -162,6 +166,28 @@ renderInputToolbar(props) {
   }
 }
 
+renderCustomView(props) {
+  const { currentMessage } = props;
+
+  if(currentMessage.location){
+    return (
+      <MapView
+        style={{width: 150,
+          height: 100,
+          borderRadius: 13,
+          margin: 3}}
+        region={{
+          latitude: currentMessage.location.latitude,
+          longitude: currentMessage.location.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        }}
+      />
+    );
+  }
+  return null;
+}
+
 renderCustomActions = (props) => {
   return <CustomActions {...props} />;
 }
@@ -176,12 +202,17 @@ renderCustomActions = (props) => {
     return (
       <View style={{flex: 1, backgroundColor: this.props.route.params.color}}>
         <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.loggedInText}</Text>
+        {this.state.image &&
+          <Image source={{ uri: this.state.image.uri }}
+           style={{ width: 200, height: 200 }} />}
         <GiftedChat
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={this.state.user}
         renderInputToolbar={this.renderInputToolbar.bind(this)}
         renderActions={this.renderCustomActions}
+        renderCustomView={this.renderCustomView}
+        image={this.state.image}
         />
         { Platform.OS === 'android' ?
          <KeyboardAvoidingView behavior="height" /> : null

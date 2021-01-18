@@ -1,58 +1,95 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+import MapView from 'react-native-maps';
+import firebase from 'firebase';
 
 export default class CustomActions extends React.Component {
+  constructor(){
+    super();
+  }
+
+  pickImage = async () => {
+    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+  
+    if(status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes:'Images'
+      }).catch(error => console.error(error));
+  
+      if(!result.cancelled){
+        const imageUrl = await this.uploadImage(result.uri);
+        this.props.onSend({ image: imageUrl });
+      }
+    }
+  }
+
+  takePhoto = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.MEDIA_LIBRARY);
+  
+    if(status === 'granted') {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: 'Images'
+      }).catch(error => console.error(error));
+  
+      if(!result.cancelled){
+        const imageUrlLink = await this.uploadImage(result.uri);
+        this.props.onSend({ image: imageUrlLink });
+      }
+    }
+  }
+
+  getLocation = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+  
+    if(status === 'granted'){
+      let result = await Location.getCurrentPositionAsync({});
+  
+      if(result){
+        this.props.onSend({
+          location: {
+            longitude: location.longitude,
+            latitude: location.latitude
+          }
+        });
+      }
+    }
+  }
+
+  uploadImage = async(uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+
+    const getImageName = uri.split('/');
+    const imageArray = getImageName[getImageName.length - 1];
+    const ref = firebase
+      .storage()
+      .ref()
+      .child(`${imageArray}`);
+    
+      const snapshot = await ref.put(blob);
+      blob.close();
+      const imageURL = await snapshot.ref.getDownloadURL();
+      return imageURL;
+  }
 
 onActionPress = () => {
   const options = ['Choose From Library', 'Take Picture',
 'Send Location', 'Cancel'];
-
-pickImage = async () => {
-  const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-
-  if(status === 'granted') {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes:'Images'
-    }).catch(error => console.error(error));
-
-    if(!result.cancelled){
-      this.setState({
-        image: result
-      });
-    }
-  }
-}
-
-takePhoto = async () => {
-  const { status } = await Permissions.askAsync(Permissions.CAMERA && Permissions.MEDIA_LIBRARY);
-
-  if(status === 'granted') {
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: 'Images'
-    }).catch(error => console.error(error));
-
-    if(!result.cancelled){
-      this.setState({
-        image: result
-      });
-    }
-  }
-}
-
-getLocation = async () => {
-  const { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-  if(status === 'granted'){
-    let result = await Location.getCurrentPositionAsync({});
-
-    if(result){
-      this.setState({
-        location: result
-      });
-    }
-  }
-}
 
   const cancelButtonIndex = options.length - 1;
   this.context.actionSheet().showActionSheetWithOptions(
@@ -76,7 +113,12 @@ getLocation = async () => {
 
   render() {
     return (
-      <TouchableOpacity style={[styles.container]} onPress={
+      <TouchableOpacity style={[styles.container]}
+      accessible={true}
+      accessibilityLabel="More options"
+      accessibilityHint="Choose whether to send an image or your location."
+      accessibilityRole="button"
+      onPress={
         this.onActionPress
       }>
         <View style={[styles.wrapper, this.props.wrapperStyle]}>
