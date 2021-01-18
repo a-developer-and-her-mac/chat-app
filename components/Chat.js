@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
-import { GiftedChat, InputToolbar, renderCustomView } from 'react-native-gifted-chat';
+import { View, Text, KeyboardAvoidingView, Platform, Image } from 'react-native';
+import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import * as Permissions from 'expo-permissions';
@@ -86,6 +86,7 @@ onSend( messages = [] ) {
   () => {
     this.addMessage();
     this.saveMessages();
+    console.log(messages);
    }
   );
 }
