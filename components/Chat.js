@@ -83,7 +83,6 @@ onSend( messages = [] ) {
   () => {
     this.addMessage();
     this.saveMessages();
-    console.log(messages);
    }
   );
 }
