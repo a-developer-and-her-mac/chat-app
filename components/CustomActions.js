@@ -4,8 +4,8 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import MapView from 'react-native-maps';
 import firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class CustomActions extends React.Component {
   constructor(){
@@ -17,7 +17,7 @@ export default class CustomActions extends React.Component {
   
     if(status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes:'Images'
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
       }).catch(error => console.error(error));
   
       if(!result.cancelled){
@@ -32,12 +32,12 @@ export default class CustomActions extends React.Component {
   
     if(status === 'granted') {
       let result = await ImagePicker.launchCameraAsync({
-        mediaTypes: 'Images'
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
       }).catch(error => console.error(error));
   
       if(!result.cancelled){
-        const imageUrlLink = await this.uploadImage(result.uri);
-        this.props.onSend({ image: imageUrlLink });
+        const imageUrl = await this.uploadImage(result.uri);
+        this.props.onSend({ image: imageUrl });
       }
     }
   }
@@ -46,9 +46,9 @@ export default class CustomActions extends React.Component {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
   
     if(status === 'granted'){
-      let result = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({});
   
-      if(result){
+      if(location){
         this.props.onSend({
           location: {
             longitude: location.coords.longitude,

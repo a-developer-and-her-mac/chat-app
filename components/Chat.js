@@ -3,9 +3,6 @@ import { View, Text, KeyboardAvoidingView, Platform, Image } from 'react-native'
 import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
-import * as Location from 'expo-location';
 import MapView from 'react-native-maps';
 import CustomActions from './CustomActions';
 
@@ -98,7 +95,7 @@ addMessage() {
     text: message.text,
     createdAt: message.createdAt,
     user: message.user,
-    image: message.image || null,
+    image: message.image || '',
     location: message.location || null
   });
   console.log(message);
@@ -148,8 +145,8 @@ onCollectionUpdate = (querySnapshot) => {
         name: data.user.name,
         avatar: data.user.avatar
       },
-      image: data.image,
-      location: data.location
+      image: data.image || '',
+      location: data.location || ''
     });
   });
   this.setState({
@@ -173,6 +170,7 @@ renderCustomView(props) {
 
   if(currentMessage.location){
     return (
+      <View>
       <MapView
         style={{width: 150,
           height: 100,
@@ -185,6 +183,7 @@ renderCustomView(props) {
           longitudeDelta: 0.0421
         }}
       />
+      </View>
     );
   }
   return null;
