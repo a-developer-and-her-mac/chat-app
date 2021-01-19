@@ -92,11 +92,11 @@ addMessage() {
   const message = this.state.messages[0];
   this.referenceMessages.add({
     _id: message._id,
-    text: message.text,
+    text: message.text || '',
     createdAt: message.createdAt,
     user: message.user,
-    image: image || null,
-    location: location || null
+    image: message.image || null,
+    location: message.location || null
   });
   console.log(message);
 }
@@ -138,7 +138,7 @@ onCollectionUpdate = (querySnapshot) => {
     let data = doc.data();
     messages.push({
       _id: data._id,
-      text: data.text.toString(),
+      text: data.text,
       createdAt: data.createdAt.toDate(),
       user: {
         _id: data.user._id,
