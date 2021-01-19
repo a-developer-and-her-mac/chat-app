@@ -95,8 +95,8 @@ addMessage() {
     text: message.text,
     createdAt: message.createdAt,
     user: message.user,
-    image: message.image || '',
-    location: message.location || null
+    image: image || null,
+    location: location || null
   });
   console.log(message);
 }
