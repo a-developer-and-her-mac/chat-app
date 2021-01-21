@@ -40,6 +40,8 @@ export default class Chat extends React.Component {
 }
 
 componentDidMount() {
+  let name = this.props.route.params.name;
+  this.props.navigation.setOptions({ title: name });
   NetInfo.fetch().then(state => {
     if (state.isConnected) {
       this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
@@ -193,12 +195,6 @@ renderCustomActions = (props) => {
 }
 
   render() {
-    //Sets name variable/screen title to be name from previous screen
-    //Not working properly, causes a warning.
-    let name = this.props.route.params.name;
-    this.props.navigation.setOptions({ title: name });
-    
-
     return (
       <View style={{flex: 1, backgroundColor: this.props.route.params.color}}>
         <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.loggedInText}</Text>
