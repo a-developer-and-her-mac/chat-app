@@ -24,5 +24,6 @@ If you are getting weird errors with `npm install` try installing watchman with 
 Then, if it still acts weird, try following the steps in [this article](https://medium.com/@mrjohnkilonzi/how-to-resolve-no-xcode-or-clt-version-detected-d0cf2b10a750).
 Still acting weird? You might have to install each dependency manually. If you do so, try installing a newer version of Firebase, as for some reason it doesn't like installing that particular version. 
 
-
+### Kanban Board
+[Link to project kanban board](https://trello.com/b/sxS6hdKv)
 
