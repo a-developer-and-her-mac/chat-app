@@ -21,7 +21,8 @@ The messages in this app are stored in Google Firebase, so running this project 
 ### Errors with `npm install`?
 If you are getting weird errors with `npm install` try installing watchman with homebrew first.
 `$ brew install watchman`
-Then, if it still acts weird, try following the steps in [this article](https://medium.com/@mrjohnkilonzi/how-to-resolve-no-xcode-or-clt-version-detected-d0cf2b10a750)
+Then, if it still acts weird, try following the steps in [this article](https://medium.com/@mrjohnkilonzi/how-to-resolve-no-xcode-or-clt-version-detected-d0cf2b10a750).
+Still acting weird? You might have to install each dependency manually. If you do so, try installing a newer version of Firebase, as for some reason it doesn't like installing that particular version. 
 
 
 
