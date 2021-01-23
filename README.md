@@ -1,6 +1,9 @@
 # Chatter
 
-Chatter is a simple chat application, built with React Native. 
+Chatter is a simple chat application, built with React Native.
+
+![chatter demo shot 1](img/demo_shot1.png)
+![chatter demo shot 2](img/demo_shot2.png)
 
 ### Installation
 
